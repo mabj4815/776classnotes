@@ -1,0 +1,1 @@
+#Class notes from Aug 29, 2024
