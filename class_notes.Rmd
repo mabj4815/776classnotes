@@ -1,0 +1,33 @@
+---
+title: "Class_Notes"
+author: "MATEO BANDALA-JACQUES"
+date: "2024-08-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(reprex)
+library(here)
+
+```
+
+## Class notes for 2024-08-29
+
+```{r cars}
+
+
+
+print("hello world")
+
+
+# reprex() will create a reproducible example of whatever is copied to the clipboard
+
+
+
+here()
+```
+# *This is an example of addition of text*
+
+## **This is an example of addition of text**
+
+### ***This is an example of addition of text***
