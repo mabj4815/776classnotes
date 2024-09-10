@@ -114,9 +114,87 @@ relig_income %>%
 
 
 
+
+
+
+```
+
+## Class notes for 2024-09-10
+
+```{r notes 2024-09-10}
+
+
+outcomes <- tibble(
+  id = rep(c("a", "b", "c"), each=3),
+  visit = rep(0:2,3),
+  outcome = rnorm(3*3,3)
+)
+
+
+outcomes
+
+
+subjects <- tibble(
+  id = c("a", "b", "c"),
+  house = c("detached", "rowhouse", "rowhouse")
+)
+
+
+subjects
+
+
+left_join(outcomes, subjects, by="id")
+ 
+
+full_join(outcomes, subjects, by="id")
+
+inner_join(outcomes, subjects, by="id")
+
+
+ 
+subjects <- tibble(
+    id = c("b", "c"),
+    visit = c(1, 0),
+    house = c("rowhouse", "rowhouse"),
+)
+
+subjects
+
+
+
+left_join(outcomes, subjects, by=c("id", "visit"))
+ full_join(outcomes, subjects,  by=c("id", "visit"))
+inner_join(outcomes, subjects,  by=c("id", "visit"))
+
+
+
+
+semi_join(outcomes, subjects,  by=c("id", "visit"))
+anti_join(outcomes, subjects,  by=c("id", "visit"))
+
+
 ```
 
 
+``` {r ggplot stuff}
+
+here()
+
+
+maacs <- read_csv(here("data", "bmi_pm25_no2_sim.csv"),
+    col_types = "nnci"
+)
+
+maacs
+
+maacs %>%
+  ggplot(aes(x=logpm25, y=NocturnalSympt)) +
+  geom_point() +
+  geom_smooth(method = "loess")
+
+
+
+```
 
 # *This is an example of addition of text*
 
