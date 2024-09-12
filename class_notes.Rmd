@@ -9,6 +9,13 @@ output: html_document
 library(reprex)
 library(here)
 library(tidyverse)
+library(ggthemes)
+library(bbplot)
+library(ThemePark)
+library(plotly)
+library(colorblindr)
+
+#remotes::install_github("clauswilke/colorblindr")
 
 ```
 
@@ -189,10 +196,65 @@ maacs
 
 maacs %>%
   ggplot(aes(x=logpm25, y=NocturnalSympt)) +
+  geom_point(aes(color=bmicat), alpha =10) +
+  geom_smooth(method = "loess")+
+  theme_stata(base_size = 20)
+
+
+
+
+library(palmerpenguins)
+library(bbplot)
+
+penguins %>%
+  ggplot(aes(x=flipper_length_mm, y=bill_length_mm, color=species)) +
   geom_point() +
-  geom_smooth(method = "loess")
+  geom_smooth(method="glm") +
+  labs(x=expression("Flipper lenght "[a]), y="Bill length", color="Species") +
+  scale_x_continuous() +
+  coord_cartesian(xlim=c(170,200))+ #This is a crop, not a true filter
+  theme_bw()
+
+  
+  penguins %>%
+  ggplot(aes(x=flipper_length_mm, y=bill_length_mm, color=species)) +
+  geom_point() +
+  geom_smooth(method="glm") +
+  bbplot::bbc_style() + 
+    labs(x=expression("Flipper lenght "[a]), y="Bill length", color="Species",
+         title = "Penguins", subtitle = "Marica") 
+
+  
+g<-  penguins %>%
+  ggplot(aes(x=flipper_length_mm, y=bill_length_mm, color=species)) +
+  geom_point() +
+  geom_smooth(method="glm") +
+  theme_starwars()+
+    labs(x=expression("Flipper lenght "[a]), y="Bill length", color="Species",
+         title = "Penguins") 
 
 
+    #Make it interactive
+g<-  penguins %>%
+  ggplot(aes(x=flipper_length_mm, y=bill_length_mm, color=species)) +
+  geom_point() +
+  geom_smooth(method="glm") +
+  theme_starwars()+
+    labs(x="FLipper length", y="Bill length", color="Species",
+         title = "Penguins") 
+
+plotly::ggplotly(g)
+
+
+
+g<-  penguins %>%
+  ggplot(aes(x=flipper_length_mm, y=bill_length_mm, color=species)) +
+  geom_point() +
+  geom_smooth(method="glm") +
+    labs(x="FLipper length", y="Bill length", color="Species",
+         title = "Penguins") 
+
+colorblindr::cvd_grid(g)
 
 ```
 
