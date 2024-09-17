@@ -257,6 +257,130 @@ g<-  penguins %>%
 colorblindr::cvd_grid(g)
 
 ```
+## Class notes for 2024-09-17
+```{r nuts and bolts}
+
+
+x <- c("hola", seq(0,25,by=5), "gonorrhea")
+
+class(x)
+
+x
+
+
+-15:15
+for(i in x){
+  print(x)
+}
+
+
+#Create an empty vector
+vector(mode="numeric", length=4)
+vector(mode="character", length=4)
+
+#Create a non-empty vector
+
+x <- c(0.5, 0.6) #numeric vector
+x <- c(TRUE, FALSE) #logical vector
+x <- c("a", "b") #character vector
+x <- c(1+0i, 2+4i) #complex vector
+
+#Atomic vectors can only contain objects of the same type/class
+class(x)
+
+# The exception is list: they allow you to have different classes of objects, and can be recursive
+
+#Atomic vectors are homosexual, wile lists  can be heterosexual
+list_object <-  list(1.5, "camila")
+list_object
+
+#If we do it with the c() function, it forces the 1.5 to be character, since vectors have to be the same class
+class (c(1.5, "camila"))
+class(list_object)
+
+
+
+typeof(4) #Doubles are approximations
+typeof(4L)
+
+
+
+x <- sqrt(2)^2
+x
+x-2
+
+
+letters
+typeof(letters)
+length(letters)
+dim(letters)
+typeof(letters)
+
+
+
+
+typeof(c(TRUE,2))
+typeof(c("a",TRUE))
+
+
+#Explicit coercion
+x <- 0:6
+class(x)
+
+as.numeric(x) #Stores as double
+as.integer(x) #Stores as integer (better if no decimals)
+as.logical(x) #1=TRUE, else = FALSE
+
+#Sometimes R can't figure it out
+
+x <- c("a", "b", "c")
+as.numeric(x)
+
+
+#Matrices
+
+#matrixes are vectors with an extra dimension  :O
+
+m <- matrix(nrow=2, ncol=3)
+m
+
+dim(m)
+
+attributes(m)
+
+#Matrices are constructed column-wise, starting top left
+
+
+m <- matrix(1:6, nrow=2, ncol=3)
+m
+
+
+
+m <- matrix(c("Camila", "Restrepo", "Colombia", 
+              "Mateo", "Jacques", "Mexico"),
+            nrow=2, ncol=3, byrow = TRUE)
+
+m
+
+
+
+colnames(m) <- c("Nombre", "Apellido", "Páis")
+
+m
+
+as_tibble(m)
+
+#Factors are objects that help us represent categories
+
+x <- factor(c("yes", "no", "no", "yes", "yes"))
+print(x)
+
+table(x)
+
+
+
+attributes(x)
+```
 
 # *This is an example of addition of text*
 
