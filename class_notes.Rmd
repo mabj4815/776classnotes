@@ -380,6 +380,141 @@ table(x)
 
 
 attributes(x)
+
+
+
+x <- c(0,1,2,0,1,2,1,2,1,2,1,0,0)
+x <- factor(x, levels = c(0,1,2), labels = c("No", "Yes", "Maybe"))
+x
+table(x)
+
+
+x <- c(0,1,2,0,1,2,1,2,1,2,1,0,0)
+x <- factor(x, levels = c(2,1,0), labels = c("Maybe", "Yes", "No"))
+x
+table(x)
+
+
+
+
+
+
+
+#Dataframe
+
+t <- tibble(
+  Name = c("Camila", "Mateo", "Mitali"),
+  Last_Name = c("Restrepo", "Jacques", "Joshi"),
+  SSN = c(209568839,590204881,290652118)
+)
+
+
+t
+
+```
+
+#Notes for 2024-09-19
+
+```{r}
+
+
+x <- 3
+
+
+
+if(x==3){
+  print("Hi")
+}
+
+
+if (x==2){
+  print("X = 2")
+}else{
+  print("X is not 2")
+}
+
+
+y <- ifelse(x==3, "It's 3", "Not 3")
+y
+
+
+
+
+for(i in 1:10){
+  print(i)
+}
+
+x <- c("a", "b", "c", "d")
+
+for (i in 1:4){
+  print(i)
+}
+
+
+seq_along(x)
+
+for (i in seq_along(x)) {
+  print(i)
+}
+
+for (i in seq_along(x)) {
+  print(i)
+}
+
+
+for (babyshark in x){
+  print(babyshark)
+}
+
+
+
+
+#While
+
+x <- 0 
+
+while (x < 10){
+  print(x)
+  x <- x+1
+  
+}
+
+
+#Next, and break
+ for (i in 1:200){
+   if (i <=20){
+     ## skip the first 20 iterations
+     next
+   }
+   print (i)
+ }
+
+
+
+#Next, and break
+ for (i in 1:200){
+   if (i >20){
+     ## skip the first 20 iterations
+
+   print (i)
+   }}
+
+
+
+
+
+#FUNCTIONS
+
+
+f <- function(num){
+  for (i in seq_len(num)){
+    cat("Hello, world!\n")
+  }
+}
+
+
+f(3)
+
 ```
 
 # *This is an example of addition of text*
