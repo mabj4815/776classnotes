@@ -513,7 +513,112 @@ f <- function(num){
 }
 
 
-f(3)
+f(5)
+
+```
+
+
+## Notes for 2024-09-24
+```{r}
+
+inches <- c(69,62,66,70,70,73,67,73,67,70)
+
+#if we wants to convert to centimeters:
+inches
+
+inches*2.54 #Each element is multiplied by 2.54
+
+#Two vectors with the same length can be added
+
+
+x<- 1:10
+y <- 1:10
+
+
+x+y
+
+
+#that is, we don't need to write a for loop for thios
+
+
+
+
+#' Title
+#'
+#' @param a 
+#' @param b 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' ##Let's show how to use my function
+#' 
+#'
+my_sum <- function(a,b){
+  if(length(a)!=length(b)){ stop("Vectors must be same length")}
+  a+b
+    c<-a+b
+  print(c)
+}
+
+
+
+y <- 1:10
+my_sum(x,y)
+
+
+library(purrr)
+
+purrr::map2_int(x,y, my_sum)
+
+
+
+x<- list(a = 1:5, b=rnorm(10))
+x
+
+
+lapply(x, mean) # Output is a list
+
+#or
+
+map_dbl(x, mean) #Output is a vector
+
+
+
+
+x <- c(rnorm(10), runif(10), rnorm(10,1))
+x
+
+f <- gl(3,10)
+f
+
+
+split(x,f)
+
+
+lapply(split(x,f),mean)
+
+
+#Splitting a data frame
+
+library("datasets")
+head(airquality)
+
+#We can split de data by month
+
+s<- split(airquality, airquality$Month)
+str(s)
+
+
+lapply(s, function(x) {
+    colMeans(x[, c("Ozone", "Solar.R", "Wind")], na.rm = TRUE)
+})
+
+sapply(s, function(x) {
+    colMeans(x[, c("Ozone", "Solar.R", "Wind")], na.rm = TRUE)
+})
+
 
 ```
 
