@@ -846,6 +846,214 @@ weekdays(birthday)
 
 ```
 
+
+
+## Notes from 2024-10-3
+
+```{r}
+#Working with da string
+
+#some strings
+c("one", "two", "three")
+
+
+#The grepl() function returns a logical vector if the pattern was found
+# grepl(pattern, x)
+
+
+regular_expression <- "a"
+string_to_search <- c("Maryland", "Antonio", "Meep")
+
+grepl(regular_expression, string_to_search, ignore.case = TRUE)
+#a is in Maryland at least one
+
+
+regular_expression <- "r.l"
+string_to_search <- "Maryland"
+grepl(regular_expression, string_to_search)
+
+
+#Build some regular expressions to search the U.S states
+head(state.name) #The 50 US States
+
+# a Period (.) is anything but a new line
+
+grepl(".", "Maryland")
+
+
+#the dot only substitutes **one character**
+grepl("a.b", c("aaa", "aab", "abb", "acadb"))
+
+
+##REPETITION 
+# + = One or more of the preceding, at least one time
+# * = One or more of the preceding, at least zero times
+# ? = Zero or 1 of the preceding
+
+grepl("a+", "Maryland" ) #Maryland has "a" at least one time
+grepl("x+", "Maryland") #No xs in Maryland
+
+grepl("x*", "Mary;land") #Well, it does have an x at least zero times
+
+
+#If we want the asterisk to modify more than one character, use a parenthesis
+
+grepl("ax+", "Maryland")
+
+#Does Maryland contain zero or more (ar) ?
+grepl("(ar)*", "Maryland")
+
+
+
+#Let's work with spookyhalloween
+
+mytext <- "spookyhalloween"
+
+#1) Does "zz" appear one or more times?
+grepl("(zz)+", mytext)
+
+#2) Does "ee" appear one or more times?
+grepl("(ee)+", mytext)
+
+#3) Does "oo" appear 0 or more times?
+grepl("(oo)*", mytext)
+
+#4) Does "ii" appear 0 or more times?
+grepl("(ii)*", mytext)
+
+
+
+
+# We can specify exact number of expressions using curly brackets
+
+# {n} : exactly n
+# {n,} : n or more
+# {,m}: at most m
+# {n,m} : between n and m
+
+#a{5} is "a exactly 5 times"
+
+#Does "Mississippi" contain exactly 2 adjacent "s"?
+
+grepl("s{2}", "Mississippi")
+
+#Does "Mississippi:" contain between 1 and 3 adjacent "s"?
+grepl("s{1,3}", "Mississippi")
+
+#Does "Mississippi:" contain between 1 and 3 adjacent "s"?
+grepl("x{,3}", "Mississippi")
+
+
+#does Mississsipii contain exactly 2 "iss"
+grepl("(iss){2}", "Mississippi")
+
+#Does Mississippi contain ss twice in a row?
+grepl("(ss){2}", "Mississippi")
+
+
+
+
+
+#Does Mississippi contain  
+#"An i, followed by 2 characters (whichever)", three times
+grepl("(i.{2}){3}", "Mississippi")
+
+
+longer_text <- "spookyspookyhalloweenspookyspookyhalloween"
+
+#1) #Search for spooky exactly 2 times
+grepl("(spooky){2}", longer_text) # True! it contains a spookyspooky
+grepl("(spooky){3}", longer_text) # False! No spookyspookyspooky
+
+#2)  Search for 'spooky' exactly 2 times followed by any character length 9
+
+grepl("(spooky){2}.{9}", longer_text)
+
+#3) The same as above, twice in a row
+
+grepl("((spooky){2}.{9}){2}", longer_text) #TRUE
+grepl("((spooky){2}.{9}){3}", longer_text) #FALSE
+
+
+
+# Character sets!
+
+
+# words (\\w) = any letter, digit or underscore
+# digits (\\d) = digits 0-9
+# whitespace (\\s) = anything white space
+
+#\\ is the opposuite
+
+
+#If we want to search for a metacharacter, we need to use \\
+
+grepl("\\+", "tragedy + time = humor") #This searches just for the plus
+grepl("\\.", "https://publichealth.jhu.edu")
+
+
+
+
+
+# \n new line
+# \t new tab
+
+
+x <- c("\\t", "\n", "\u00b5")
+x
+writeLines(x)
+
+
+
+#Search for a word
+
+grepl("\\w", "acbdef")
+
+
+
+
+#Easier to specify in brackers
+
+grepl("[aeiou]", "rythms") #Any of the vowels in rhythm
+grepl("[A-Z|a-z|0-9]", "rythms") #Any of the vowels in rhythm
+grepl("\\w", "rythms") #Any of the vowels in rhythm
+
+
+
+grepl("[^aeiou]", "rythms") #Anything but a vowel
+
+
+
+#All state names tha begin and end with a vowel
+
+
+
+grepl("[aeiou]", state.name) #has a vowel
+
+grepl("^[AEIOU]", state.name) #starts with vowel
+
+
+grepl("^[AEIOU]{1}", state.name) #starts with exactly one vowel
+
+
+grepl("^[AEIOU]{1}.+", state.name) #starts with exactly one vowel. and then anything else
+
+
+grep("^[AEIOU]{1}.+[aeiou]{1}$", state.name) #starts and ends with vowel
+grepl("^[AEIOU]{1}.+[aeiou]{1}$", state.name) #starts and ends with vowel
+
+
+
+grep("[Ii]", c("Hawaii", "Maryland", "Kentucky"))
+
+
+#Sub only replaces the first one
+sub("[Ii]", "1", c("Hawaii", "Maryland", "Kentucky"))
+#this changes all of them
+gsub("[Ii]", "1", c("Hawaii", "Maryland", "Illinois"))
+
+```
+
 # *This is an example of addition of text*
 
 ## **This is an example of addition of text**
