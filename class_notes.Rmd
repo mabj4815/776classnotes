@@ -1027,6 +1027,8 @@ grepl("[^aeiou]", "rythms") #Anything but a vowel
 #All state names tha begin and end with a vowel
 
 
+state.area
+
 
 grepl("[aeiou]", state.name) #has a vowel
 
@@ -1052,7 +1054,264 @@ sub("[Ii]", "1", c("Hawaii", "Maryland", "Kentucky"))
 #this changes all of them
 gsub("[Ii]", "1", c("Hawaii", "Maryland", "Illinois"))
 
+
+
+
+
+
+
+
+str_extract(state.area, "[0-9]+")
+str_extract(state.area, "\\d+")
+
+
+
+str_replace(state.name, "[Aa]", "B")
+str_replace_all(state.name, "[Aa]", "B")
+
+
+str_replace_all(state.name, "land", "stan")
+
+
 ```
+
+
+
+## Notes from 2024-10-08
+# Working with factors
+
+```{r}
+
+month_levels <- c(
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
+
+
+
+x <- c("Dec", "Apr", "Jan", "Mar")
+x_typo <- c("Dec", "Apr", "Jam", "Mar")
+
+
+y <- factor(x, levels = month_levels)
+y
+
+
+y <- factor(x_typo, levels = month_levels)
+y
+
+
+
+as.numeric(as.factor("hello")) #When it is turned into a factor, "1" is the first level
+
+as.numeric(as.factor(c("hello", "goodbye")))
+
+
+
+
+income_level <- c(
+  rep("low", 10),
+  rep("medium",10),
+  rep ("high", 10)
+)
+
+x <- factor(income_level)
+y <- rnorm(30)
+
+lm(y~x) #But what if I wanted medium to be the reference?
+
+
+
+levels(x)
+x <- relevel(x, ref="medium")
+
+
+
+# You wanna talk about factors? Let's talk about factors
+
+library(forcats)
+
+gss_cat %>% glimpse()
+
+
+#When factors are stored in a tibble, you can see their levels like this:
+gss_cat %>%
+  count(race) 
+
+gss_cat %>%
+  ggplot(aes(x=race)) +
+  geom_bar()
+
+levels(gss_cat$race)
+table(gss_cat$race, useNA = "ifany")
+
+
+
+
+#Let's change the order of the levels
+gss_cat %>%
+  count(relig)
+attributes(gss_cat$relig)
+
+
+
+relig_summary <- gss_cat %>%
+  group_by(relig) %>%
+  summarise(
+    tvhours = mean(tvhours, na.rm = TRUE,
+                   n = n())
+  )
+
+
+
+relig_summary %>%
+  ggplot(aes(x=tvhours,
+             y= fct_reorder(relig, tvhours) )) +
+  geom_point()
+
+#but let's re-order
+
+
+
+#different example
+
+rincome_summary <- gss_cat %>%
+  group_by(rincome) %>%
+  summarise(
+    age = mean(age, na.rm=TRUE),
+    n=n()
+  )
+
+
+rincome_summary %>%
+  ggplot(aes(x=age, y=rincome)) +
+  geom_point()
+
+#We could use fct_reorder()
+
+rincome_summary %>%
+  ggplot(aes(x=age, 
+             y=fct_reorder(rincome,age))) +
+  geom_point()
+
+#But now the'yre not by intervals, so the other one was preferred
+
+rincome_summary %>%
+  ggplot(aes(x=age, y=rincome)) +
+  geom_point()
+
+
+#Let's practice 
+
+penguins
+
+#Calculate avg bill_length for each species
+
+bill_info <- penguins %>%
+  group_by(species) %>%
+  summarise(avg_bill = mean(bill_length_mm, na.rm=TRUE))
+
+bill_info  %>%
+  mutate(species = fct_reorder(species, avg_bill)) %>%
+  ggplot(aes(x=species, y=avg_bill)) +
+  geom_point()
+
+
+#Now fct_relevel
+
+#Back to this one
+rincome_summary %>%
+  ggplot(aes(x=age, y=rincome)) +
+  geom_point()
+
+#We now set the first levels, and the rest remain
+rincome_summary %>%
+  ggplot(aes(x=age, y= fct_rev(fct_relevel(rincome, "Not applicable", "Refused")))) +
+  geom_point()
+
+
+rincome_summary %>%
+  ggplot(aes(x=age, y= fct_relevel(rincome, "Not applicable", "Refused"))) +
+  geom_point()
+
+#There's a fct_reorder2()
+
+
+
+by_age <- gss_cat %>%
+  filter(!is.na(age))%>%
+  count(age, marital)%>%
+  group_by(age) %>%
+  mutate(prop = n/sum(n))
+
+by_age %>%
+  ggplot(aes(x=age, y=prop, colour=marital)) +
+  geom_line(na.rm=TRUE)
+
+
+
+by_age %>%
+  ggplot(aes(x=age, y=prop, 
+             colour= fct_relevel(marital, "Separated", "Married"))) +
+  geom_line(na.rm=TRUE) +
+  labs(colour="Marital")
+
+
+
+by_age %>%
+  ggplot(aes(x=age, y=prop,
+             colour = fct_reorder2(marital, age, prop))) +
+  geom_line()
+
+#For each category, for the highest level of X, it found the highest value of Y
+#That is, at the end of follow-up, what was the proportion?
+
+
+
+
+#fct_infreq() orders in decreasing frequency without the need for additional variables
+
+gss_cat %>%
+  mutate(marital = marital %>% fct_infreq() %>%fct_rev()) %>%
+  ggplot(aes(x=marital)) +
+  geom_bar()
+
+gss_cat %>%
+  count(partyid)
+
+#New on theleft, old in the right
+
+gss_cat %>%
+  mutate(party = fct_recode(partyid,
+         "Republican, strong" = "Strong, republican",
+         "Republican, weak" = "Not str republican",
+        "Independent, near rep" = "Ind,near rep",
+        "Independent, near dem" = "Ind,near dem",
+        "Democrat, weak"        = "Not str democrat",
+        "Democrat, strong"      = "Strong democrat"
+    )) %>%
+    count(party)
+
+
+#Actually, we want to combine
+
+
+gss_cat %>% 
+  mutate(partyid = fct_collapse(partyid,
+    "Republican" = c("Strong republican", "Not str republican"),
+    "Democrat" = c("Strong democrat", "Not str democrat"),
+    "Independent" = c("Independent", "Ind,near dem" ,"Ind,near rep")
+  )) %>%
+  count(partyid)
+
+
+
+#fct_lump_lowfreq() will lump low catwgories together into 'other' while keeping 'other' as the lowest
+
+
+?fct_collapse
+```
+
 
 # *This is an example of addition of text*
 
